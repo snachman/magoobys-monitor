@@ -1,6 +1,7 @@
 import pandas as pd    
 import requests
 from bs4 import BeautifulSoup
+import re
 
 def gather_data_for_debug():
     with open('data.html', 'w') as f:
@@ -35,7 +36,13 @@ def get_month_cells(html):
     return(cells)
 
 def parse_cell(cell):
-    return cell.text
+    name = ''
+    date = cell.find('span', class_='date').text
+    if cell.find('li', class_='col-md-6 small-font'):
+        name = cell.find('li', class_='col-md-6 small-font').text
+    # format = '\w+\s\w+'
+    # names = re.search(format, cell.text)
+    return {'date': date, 'name': name}
 
 
 def main(debug=False):
